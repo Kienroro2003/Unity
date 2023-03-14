@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.UI;using UnityEngine.UI;
+using UnityEditor.UI;
+using UnityEngine.UI;
 
 public class Setting : MonoBehaviour
 {
@@ -24,8 +25,8 @@ public class Setting : MonoBehaviour
         Debug.Log("Width parent: " + width + ", height parent: " + height);
         int intRows = int.Parse(rows.text);
         int intColumns = int.Parse(columns.text);
-        float spaceRow = (height - heightBox * intRows) / intRows + heightBox;
-        float spaceColumn = (width - withBox * intColumns) / intColumns + withBox;
+        float spaceRow = (height - heightBox * intRows) / (intRows - 1);
+        float spaceColumn = (width - withBox * intColumns) / (intColumns - 1);
         foreach (Transform child in panel.transform)
         {
             Destroy(child.gameObject);
@@ -37,10 +38,17 @@ public class Setting : MonoBehaviour
                 GameObject game = Instantiate(boxPrefab);
                 game.SetActive(true);
                 game.GetComponent<Image>().enabled = true;
-                game.transform.position = new Vector3(-rootLeft + spaceColumn * j, rootTop - spaceRow * i, 0);
+                Debug.Log(rootTop - heightBox / 2 - spaceRow * i);
+                game.transform.position = new Vector3(-rootLeft + withBox / 2 + spaceColumn * j, rootTop - heightBox / 2 - spaceRow * i, 0);
                 game.transform.SetParent(panel.transform, false);
             }
         }
+    }
+
+    void OnRectTransformDimensionsChange()
+    {
+        Debug.Log("Run change windown");
+        buttonOK();
     }
 
 }
